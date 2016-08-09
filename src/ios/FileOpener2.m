@@ -62,7 +62,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         self.controller.delegate = self;
         self.controller.UTI = uti;
 
-        CGRect rect = CGRectMake(0, 0, 1000.0f, 150.0f);
+        CGRect rect = CGRectMake(cont.view.bounds.size.width / 2, cont.view.bounds.size.height, 0, 0);
         CDVPluginResult* pluginResult = nil;
         BOOL wasOpened = [self.controller presentOptionsMenuFromRect:rect inView:cont.view animated:NO];
 
