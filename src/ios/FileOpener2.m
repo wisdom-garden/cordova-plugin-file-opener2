@@ -28,6 +28,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 @implementation FileOpener2
 
+- (NSInteger)integerValueForKey:(NSDictionary*)dict key:(NSString*)key defaultValue:(NSInteger)defaultValue
+{
+    NSInteger value = defaultValue;
+
+    NSNumber* val = [dict valueForKey:key];  // value is an NSNumber
+
+    if (val != nil) {
+        value = [val integerValue];
+    }
+    return value;
+}
+
 - (void) open: (CDVInvokedUrlCommand*)command {
 
     NSString *path = command.arguments[0];
@@ -62,7 +74,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         self.controller.delegate = self;
         self.controller.UTI = uti;
 
-        CGRect rect = CGRectMake(cont.view.bounds.size.width / 2, cont.view.bounds.size.height, 0, 0);
+        NSInteger x = cont.view.bounds.size.width / 2;
+        NSInteger y = cont.view.bounds.size.height;
+        NSInteger width = 0;
+        NSInteger height = 0;
+        if (command.arguments.count > 2) {
+            NSDictionary* options = command.arguments[2];
+            x = [self integerValueForKey:options key:@"x" defaultValue:cont.view.bounds.size.width / 2];
+            y = [self integerValueForKey:options key:@"y" defaultValue:cont.view.bounds.size.height];
+            width = [self integerValueForKey:options key:@"width" defaultValue:0];
+            height = [self integerValueForKey:options key:@"height" defaultValue:0];
+        }
+        CGRect rect = CGRectMake(x, y, width, height);
         CDVPluginResult* pluginResult = nil;
         BOOL wasOpened = [self.controller presentOptionsMenuFromRect:rect inView:cont.view animated:NO];
 
